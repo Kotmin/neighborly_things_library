@@ -1,0 +1,32 @@
+services:
+  app:
+    build:
+      context: .
+      target: prod
+    environment:
+      RAILS_ENV: development
+      LOG_LEVEL: debug
+      SECRET_KEY_BASE: dev-secret-key-base
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - bundle_cache:/usr/local/bundle
+      - sqlite_dev:/app/db
+
+  test:
+    build:
+      context: .
+      target: test
+    environment:
+      RAILS_ENV: test
+      SECRET_KEY_BASE: test-secret-key-base
+    volumes:
+      - .:/app
+      - bundle_cache:/usr/local/bundle
+      - sqlite_test:/app/db
+
+volumes:
+  bundle_cache:
+  sqlite_dev:
+  sqlite_test:
