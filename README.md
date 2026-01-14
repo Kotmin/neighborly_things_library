@@ -3,6 +3,13 @@
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
+## Run tests
+```bash
+docker build -t neighborly:test --target test .
+docker run --rm neighborly:test
+
+```
+
 Things you may want to cover:
 
 * Ruby version
