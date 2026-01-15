@@ -4,7 +4,7 @@ module Api
 
     def create
       loan = Loans::Return.call(item_id: params.require(:item_id))
-      render json: loan.as_json(only: %i[id item_id borrower_name borrowed_at returned_at created_at updated_at])
+      render json: loan.as_json(only: %i[id item_id borrower_name borrowed_at returned_at created_at updated_at]), status: :ok
     end
 
     private

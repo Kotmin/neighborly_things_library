@@ -11,7 +11,6 @@ module Loans
 
         active_loan.update!(returned_at: now)
         item.update!(available: true)
-
         active_loan
       end
     end
