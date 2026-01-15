@@ -1,0 +1,19 @@
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/stringio-3.2.0/ext/stringio
+/opt/hostedtoolcache/Ruby/3.4.7/x64/bin/ruby extconf.rb
+checking for rb_io_mode_t in ruby/io.h... no
+creating Makefile
+
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/stringio-3.2.0/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20260114-2168-do22ft sitelibdir\=./.gem.20260114-2168-do22ft clean
+
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/stringio-3.2.0/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20260114-2168-do22ft sitelibdir\=./.gem.20260114-2168-do22ft
+compiling stringio.c
+linking shared-object stringio.so
+
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/stringio-3.2.0/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20260114-2168-do22ft sitelibdir\=./.gem.20260114-2168-do22ft install
+/usr/bin/install -c -m 0755 stringio.so ./.gem.20260114-2168-do22ft
+
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/stringio-3.2.0/ext/stringio
+make DESTDIR\= sitearchdir\=./.gem.20260114-2168-do22ft sitelibdir\=./.gem.20260114-2168-do22ft clean

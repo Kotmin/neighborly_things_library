@@ -1,0 +1,19 @@
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+/opt/hostedtoolcache/Ruby/3.4.7/x64/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20260114-2168-dnnyi sitelibdir\=./.gem.20260114-2168-dnnyi clean
+
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20260114-2168-dnnyi sitelibdir\=./.gem.20260114-2168-dnnyi
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.so
+
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20260114-2168-dnnyi sitelibdir\=./.gem.20260114-2168-dnnyi install
+/usr/bin/install -c -m 0755 debug.so ./.gem.20260114-2168-dnnyi/debug
+
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20260114-2168-dnnyi sitelibdir\=./.gem.20260114-2168-dnnyi clean

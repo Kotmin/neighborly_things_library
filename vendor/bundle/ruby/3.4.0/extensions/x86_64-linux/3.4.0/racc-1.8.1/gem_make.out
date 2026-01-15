@@ -1,0 +1,18 @@
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+/opt/hostedtoolcache/Ruby/3.4.7/x64/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20260114-2168-f5gw3m sitelibdir\=./.gem.20260114-2168-f5gw3m clean
+
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20260114-2168-f5gw3m sitelibdir\=./.gem.20260114-2168-f5gw3m
+compiling cparse.c
+linking shared-object racc/cparse.so
+
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20260114-2168-f5gw3m sitelibdir\=./.gem.20260114-2168-f5gw3m install
+/usr/bin/install -c -m 0755 cparse.so ./.gem.20260114-2168-f5gw3m/racc
+
+current directory: /home/runner/work/neighborly_things_library/neighborly_things_library/vendor/bundle/ruby/3.4.0/gems/racc-1.8.1/ext/racc/cparse
+make DESTDIR\= sitearchdir\=./.gem.20260114-2168-f5gw3m sitelibdir\=./.gem.20260114-2168-f5gw3m clean
