@@ -9,9 +9,16 @@ HOST_HEADER="${HOST_HEADER:-}"     # e.g. "neighborly.local" for ingress. Leave 
 CURL_BIN="${CURL_BIN:-curl}"
 JQ_BIN="${JQ_BIN:-jq}"
 
-# Benchmark
+# Benchmark (health endpoint)
 CONCURRENCY="${CONCURRENCY:-10}"
 REQUESTS="${REQUESTS:-200}"
+
+# Seeding
+SEED_ITEMS="${SEED_ITEMS:-0}"              # number of items to create before tests/bench
+SEED_CONCURRENCY="${SEED_CONCURRENCY:-5}"  # parallelism for seeding writes
+
+# Optional: benchmark list endpoint too
+BENCH_LIST="${BENCH_LIST:-0}"              # 1 to enable list benchmark
 
 # ===========================
 # Preconditions
@@ -84,13 +91,94 @@ json_file_get() {
 }
 
 ms_now() {
-  # POSIX-ish: use date if available with milliseconds, else fallback to seconds
   if date +%s%3N >/dev/null 2>&1; then
     date +%s%3N
   else
     echo "$(( $(date +%s) * 1000 ))"
   fi
 }
+
+bench_endpoint() {
+  local label="$1"
+  local url_path="$2"
+
+  echo "== Bench: $label"
+  echo "Requests=$REQUESTS Concurrency=$CONCURRENCY"
+
+  local start_ms end_ms elapsed_ms rps
+  start_ms="$(ms_now)"
+
+  export BASE_URL HOST_HEADER CURL_BIN url_path
+  seq "$REQUESTS" | xargs -I{} -P "$CONCURRENCY" bash -lc '
+    set -euo pipefail
+    args=(-fsS)
+    if [[ -n "${HOST_HEADER:-}" ]]; then
+      args+=(-H "Host: ${HOST_HEADER}")
+    fi
+    "${CURL_BIN}" "${args[@]}" "${BASE_URL}${url_path}" >/dev/null
+  ' || {
+    echo "Bench failed"
+    exit 1
+  }
+
+  end_ms="$(ms_now)"
+  elapsed_ms="$((end_ms - start_ms))"
+  rps="$("$JQ_BIN" -n --argjson req "$REQUESTS" --argjson ms "$elapsed_ms" \
+    '$req / ($ms/1000) | (.*100 | round)/100'
+  )"
+
+  echo "Elapsed: ${elapsed_ms}ms"
+  echo "Approx RPS: ${rps}"
+  echo
+}
+
+seed_items() {
+  local n="$1"
+  local seed_conc="$2"
+
+  if [[ "$n" -le 0 ]]; then
+    return 0
+  fi
+
+  echo "== Seed: creating $n items (concurrency=$seed_conc)"
+
+  export BASE_URL HOST_HEADER CURL_BIN JQ_BIN
+
+  seq "$n" | xargs -I{} -P "$seed_conc" bash -lc '
+    set -euo pipefail
+    i="{}"
+
+    payload="$("${JQ_BIN}" -n \
+      --arg name "Seed Item ${i}" \
+      --arg category "Seed" \
+      --arg description "Generated item ${i}" \
+      --arg condition "good" \
+      "{item:{name:\$name,category:\$category,description:\$description,condition:\$condition}}"
+    )"
+
+    args=(-sS -o /dev/null -w "%{http_code}" -X POST "${BASE_URL}/api/items" -H "Content-Type: application/json" -d "${payload}")
+    if [[ -n "${HOST_HEADER:-}" ]]; then
+      args+=(-H "Host: ${HOST_HEADER}")
+    fi
+
+    code="$("${CURL_BIN}" "${args[@]}")"
+    if [[ "$code" != "201" ]]; then
+      echo "Seed failed for item ${i}: HTTP ${code}"
+      exit 1
+    fi
+  ' || {
+    echo "Seeding failed"
+    exit 1
+  }
+
+  echo "Seed: OK"
+  echo
+}
+
+# ===========================
+# Seed data (optional)
+# ===========================
+seed_items "$SEED_ITEMS" "$SEED_CONCURRENCY"
 
 # ===========================
 # Smoke tests
@@ -142,33 +230,10 @@ echo "Smoke tests: OK"
 echo
 
 # ===========================
-# Mini benchmark (GET /healthz)
+# Benchmarks
 # ===========================
-echo "== Bench: GET /healthz"
-echo "Requests=$REQUESTS Concurrency=$CONCURRENCY"
+bench_endpoint "GET /healthz" "/healthz"
 
-start_ms="$(ms_now)"
-
-# xargs parallel curl workers
-export BASE_URL HOST_HEADER CURL_BIN
-seq "$REQUESTS" | xargs -I{} -P "$CONCURRENCY" bash -lc '
-  set -euo pipefail
-  args=(-fsS)
-  if [[ -n "${HOST_HEADER:-}" ]]; then
-    args+=(-H "Host: ${HOST_HEADER}")
-  fi
-  "${CURL_BIN}" "${args[@]}" "${BASE_URL}/healthz" >/dev/null
-' || {
-  echo "Bench failed"
-  exit 1
-}
-
-end_ms="$(ms_now)"
-elapsed_ms="$((end_ms - start_ms))"
-
-rps="$("$JQ_BIN" -n --argjson req "$REQUESTS" --argjson ms "$elapsed_ms" \
-  '$req / ($ms/1000) | (.*100 | round)/100'
-)"
-echo "Elapsed: ${elapsed_ms}ms"
-echo "Approx RPS: ${rps}"
-echo "Bench: OK"
+if [[ "$BENCH_LIST" == "1" ]]; then
+  bench_endpoint "GET /api/items" "/api/items"
+fi

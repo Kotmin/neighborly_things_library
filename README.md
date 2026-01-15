@@ -48,3 +48,20 @@ Run against Minikube Ingress
 MINIKUBE_IP="$(minikube ip)"
 BASE_URL="http://${MINIKUBE_IP}" HOST_HEADER="neighborly.local" ./scripts/api_smoke_and_bench.sh
 ```
+
+##  Seed multiple items
+Seed 200 items, then run smoke + health benchmark:
+```bash
+SEED_ITEMS=200 SEED_CONCURRENCY=10 BASE_URL=http://localhost:3000 ./scripts/api_smoke_and_bench.sh
+```
+
+Against Minikube Ingress:
+```bash
+MINIKUBE_IP="$(minikube ip)"
+SEED_ITEMS=200 SEED_CONCURRENCY=10 BASE_URL="http://${MINIKUBE_IP}" HOST_HEADER="neighborly.local" ./scripts/api_smoke_and_bench.sh
+```
+
+Enable list benchmark too:
+```bash
+BENCH_LIST=1 REQUESTS=1000 CONCURRENCY=25 BASE_URL=http://localhost:3000 ./scripts/api_smoke_and_bench.sh
+```
